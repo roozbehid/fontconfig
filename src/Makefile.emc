@@ -1,0 +1,55 @@
+top_srcdir = ..
+
+CC = emcc
+LD = emcc
+
+CFG_VAR = $(CFG)
+ifeq ($(CFG_VAR),)
+CFG_VAR = release
+endif
+
+libfontconfig_la_SOURCES = \
+	fcatomic.c \
+	fccache.c \
+	fccfg.c \
+	fccharset.c \
+	fccompat.c \
+	fcdbg.c \
+	fcdefault.c \
+	fcdir.c \
+	fcformat.c \
+	fcfreetype.c \
+	fcfs.c \
+	fcptrlist.c \
+	fchash.c \
+	fcinit.c \
+	fclang.c \
+	fclist.c \
+	fcmatch.c \
+	fcmatrix.c \
+	fcname.c \
+	fcobjs.c \
+	fcpat.c \
+	fcrange.c \
+	fcserialize.c \
+	fcstat.c \
+	fcstr.c \
+	fcweight.c \
+	fcxml.c \
+	ftglue.c
+
+    
+HEADERS = $(wildcard *.h)
+OBJS=$(libfontconfig_la_SOURCES:.c=.o)
+
+
+BASE_CFLAGS = -DHAVE_CONFIG_H -s USE_FREETYPE=1 -I. -I$(top_srcdir) -I../../cairo -I../../libexpat/expat/lib
+GDIPLUS_CFLAGS  = $(BASE_CFLAGS) $(PKG_CFLAGS) $(CFG_CFLAGS) $(CFLAGS)
+
+
+%.o: %.c 
+	$(CC) -c $< $(GDIPLUS_CFLAGS) -o "$@" 
+
+libfontconfig.bc: $(OBJS)
+	$(CC) $(OBJS) -o libfontconfig.bc
+

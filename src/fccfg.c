@@ -1946,6 +1946,7 @@ DllMain (HINSTANCE hinstDLL,
 #define FONTCONFIG_FILE	"fonts.conf"
 #endif
 
+#define FONTCONFIG_PATH "/etc/"
 static FcChar8 *
 FcConfigFileExists (const FcChar8 *dir, const FcChar8 *file)
 {
