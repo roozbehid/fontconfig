@@ -158,7 +158,9 @@ FcDirCacheDeleteUUID (const FcChar8  *dir,
     FcChar8 *target, *d;
     FcBool ret = FcTrue;
     struct stat statb;
+#ifndef _WINDOWS
     struct timeval times[2];
+#endif
 
     if (sysroot)
 	d = FcStrBuildFilename (sysroot, dir, NULL);
@@ -173,6 +175,7 @@ FcDirCacheDeleteUUID (const FcChar8  *dir,
     ret = unlink ((char *) target) == 0;
     if (ret)
     {
+#ifndef _WINDOWS
 	times[0].tv_sec = statb.st_atime;
 	times[1].tv_sec = statb.st_mtime;
 #ifdef HAVE_STRUCT_STAT_ST_MTIM
@@ -186,6 +189,7 @@ FcDirCacheDeleteUUID (const FcChar8  *dir,
 	{
 	    fprintf (stderr, "Unable to revert mtime: %s\n", d);
 	}
+#endif
 	FcHashTableRemove (config->uuid_table, target);
     }
     FcStrFree (target);
